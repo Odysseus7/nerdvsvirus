@@ -26,7 +26,7 @@ public class Game extends GameApplication {
     protected void initGame(){
         player = FXGL.entityBuilder()
                 .at(300, 300)
-                .view("sprite.png")
+                .view("/Game/sprite.png")
                 .buildAndAttach();
     }
 
