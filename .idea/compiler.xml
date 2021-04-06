@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="challengeweek" />
         <module name="Nerdsvsthevirus" />
+        <module name="nerdsvsthevirus" />
       </profile>
     </annotationProcessing>
   </component>
