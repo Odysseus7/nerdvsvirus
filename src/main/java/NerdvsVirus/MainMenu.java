@@ -29,19 +29,27 @@ public class MainMenu extends FXGLMenu {
         Button exitButton = new Button("Exit", "#d65c5b", "#b54948", () -> {System.exit(0);});
 
 
+        InputStream input = getClass().getResourceAsStream("../assets/textures/Start/logo.png");
+        Image image = new Image(input);
+        ImageView imageView = new ImageView(image);
+
+        imageView.setTranslateX(FXGL.getAppWidth() / 2 - 447 / 2);
+        imageView.setTranslateY(FXGL.getAppHeight() / 2 - 210);
+
+
         startButton.setTranslateX(FXGL.getAppWidth() / 2 - 125 / 2);
-        startButton.setTranslateY(FXGL.getAppHeight() / 2 - 150 / 2);
+        startButton.setTranslateY(FXGL.getAppHeight() / 2 - 35);
 
         scoreButton.setTranslateX(FXGL.getAppWidth() / 2 - 125 / 2);
-        scoreButton.setTranslateY(FXGL.getAppHeight() / 2 - 10);
+        scoreButton.setTranslateY(FXGL.getAppHeight() / 2 + 30);
 
         exitButton.setTranslateX(FXGL.getAppWidth() / 2 - 125 / 2);
-        exitButton.setTranslateY(FXGL.getAppHeight() / 2 + 55);
+        exitButton.setTranslateY(FXGL.getAppHeight() / 2 + 95);
 
         getContentRoot().setPrefWidth(1200);
         getContentRoot().setPrefHeight(800);
         getContentRoot().setId("menu");
-        getContentRoot().getChildren().addAll(startButton, scoreButton, exitButton);
+        getContentRoot().getChildren().addAll(imageView, startButton, scoreButton, exitButton);
     }
 
 
