@@ -25,16 +25,19 @@ public class MainMenu extends FXGLMenu {
         getContentRoot().getStylesheets().add(getClass().getResource("../css/styles.css").toExternalForm());
 
         Button startButton = new Button("Play", "#b0d876", this::fireNewGame);
+        Button scoreButton = new Button("Score", "#3498db", () -> {});
 
 
         startButton.setTranslateX(FXGL.getAppWidth() / 2 - 125 / 2);
         startButton.setTranslateY(FXGL.getAppHeight() / 2 - 150 / 2);
 
+        scoreButton.setTranslateX(FXGL.getAppWidth() / 2 - 125 / 2);
+        scoreButton.setTranslateY(FXGL.getAppHeight() / 2 - 10);
 
         getContentRoot().setPrefWidth(1200);
         getContentRoot().setPrefHeight(800);
         getContentRoot().setId("menu");
-        getContentRoot().getChildren().add(startButton);
+        getContentRoot().getChildren().addAll(startButton, scoreButton);
     }
 
 
