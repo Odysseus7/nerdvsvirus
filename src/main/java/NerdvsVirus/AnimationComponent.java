@@ -12,11 +12,13 @@ import javafx.util.Duration;
 
 public class AnimationComponent extends Component {
 
-    private int speed = 0;
+
     private int jumps = 2;
+
     private PhysicsComponent physics;
 
     private AnimatedTexture texture;
+
     private AnimationChannel animIdle, animWalk;
 
 
@@ -38,14 +40,14 @@ public class AnimationComponent extends Component {
 
         physics.onGroundProperty().addListener((obs, old, isOnGround) -> {
             if (isOnGround) {
-                jumps = 1;
+                jumps = 2;
             }
         });
     }
 
     @Override
     public void onUpdate(double tpf) {
-        entity.translateX(speed * tpf);
+        //entity.translateX(speed * tpf);
         if (physics.isMovingX()) {
             if (texture.getAnimationChannel() != animWalk) {
                 texture.loopAnimationChannel(animWalk);
@@ -71,6 +73,9 @@ public class AnimationComponent extends Component {
         physics.setVelocityX(0);
     }
     public void jump(){
+        if (jumps == 0){
+            return;
+        }
         physics.setVelocityY(-300);
     }
 }
