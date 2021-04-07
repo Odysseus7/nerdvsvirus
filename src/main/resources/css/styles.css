@@ -1,7 +1,9 @@
-#menu{
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+#menu {
     -fx-background-image: url("../assets/textures/Start/startBg.png");
     -fx-background-size: cover;
 }
+<<<<<<< HEAD
 
 #start {
 <<<<<<< HEAD
@@ -11,3 +13,5 @@
 >>>>>>> origin
     -fx-background-size: cover;
 }
+=======
+>>>>>>> 361084d1906552a061f7c5dfcb948707136138da

@@ -12,54 +12,75 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 
 
 public class MainMenu extends FXGLMenu {
 
     public MainMenu() {
         super(MenuType.MAIN_MENU);
-<<<<<<< HEAD:src/main/java/NerdvsVirus/MainMenu.java
         getContentRoot().getStylesheets().add(getClass().getResource("../css/styles.css").toExternalForm());
-=======
-        getContentRoot().getStylesheets().add(getClass().getResource("css/styles.css").toExternalForm());
->>>>>>> origin:src/main/java/MainMenu.java
-        var startButton = new StartButton("Start new game", this::fireNewGame);
-        startButton.setTranslateX(FXGL.getAppWidth() / 2 - 200 / 2);
-        startButton.setTranslateY(FXGL.getAppHeight() / 2 - 40 / 2);
 
+        Button startButton = new Button("Play", "#b0d876", "#90b855", this::fireNewGame);
+        Button scoreButton = new Button("Score", "#3498db", "#2980b9", () -> {});
+        Button exitButton = new Button("Exit", "#d65c5b", "#b54948", () -> {System.exit(0);});
+
+
+        startButton.setTranslateX(FXGL.getAppWidth() / 2 - 125 / 2);
+        startButton.setTranslateY(FXGL.getAppHeight() / 2 - 150 / 2);
+
+        scoreButton.setTranslateX(FXGL.getAppWidth() / 2 - 125 / 2);
+        scoreButton.setTranslateY(FXGL.getAppHeight() / 2 - 10);
+
+        exitButton.setTranslateX(FXGL.getAppWidth() / 2 - 125 / 2);
+        exitButton.setTranslateY(FXGL.getAppHeight() / 2 + 55);
 
         getContentRoot().setPrefWidth(1200);
         getContentRoot().setPrefHeight(800);
         getContentRoot().setId("menu");
-        getContentRoot().getChildren().add(startButton);
+        getContentRoot().getChildren().addAll(startButton, scoreButton, exitButton);
     }
 
 
-    private static class StartButton extends StackPane {
-        public StartButton(String name, Runnable action) {
-
-            var bg = new Rectangle(200, 40);
+    private static class Button extends StackPane {
+        public Button(String name, String color, String hoverColor, Runnable action) {
+            name = name.toUpperCase();
+            var bg = new Rectangle(125, 40);
             bg.setId("start");
-//            bg.setStroke(Color.WHITE);
-//
-//            var text = FXGL.getUIFactoryService().newText(name, Color.WHITE, 18);
-//
-//            bg.fillProperty().bind(
-//                    Bindings.when(hoverProperty()).then(Color.WHITE).otherwise(Color.BLACK)
-//            );
+            bg.setFill(Color.web(color));
+            bg.setStroke(Color.web("#0d1c42"));
+            bg.setStyle("-fx-stroke-width: 3");
+            bg.setArcWidth(15);
+            bg.setArcHeight(15);
+
+            InputStream fontStream = getClass().getResourceAsStream("../assets/fonts/RetroGaming.ttf");
+            try {
+                Font bgFont = Font.loadFont(fontStream, 20);
+                fontStream.close();
+
+                Text text = new Text(name);
+
+                text.setFont(bgFont);
+
+
+                getChildren().addAll(bg, text);
+            } catch (IOException ioe){
+                System.out.println(ioe.getMessage());
+            }
+
+            bg.fillProperty().bind(
+                    Bindings.when(hoverProperty()).then(Color.web(hoverColor)).otherwise(Color.web(color))
+            );
 //
 //            text.fillProperty().bind(
 //                    Bindings.when(hoverProperty()).then(Color.BLACK).otherwise(Color.WHITE)
 //            );
 
             setOnMouseClicked(e -> action.run());
-            getChildren().addAll(bg);
+
         }
     }
 }

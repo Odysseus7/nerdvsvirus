@@ -76,6 +76,5 @@ public class Game extends GameApplication {
     }
     public static void main(String[] args) {
         launch(args);
-        System.out.println("HALLO");
     }
 }
