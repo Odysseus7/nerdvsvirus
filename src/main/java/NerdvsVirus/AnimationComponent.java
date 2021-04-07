@@ -38,21 +38,18 @@ public class AnimationComponent extends Component {
 
         physics.onGroundProperty().addListener((obs, old, isOnGround) -> {
             if (isOnGround) {
-                jumps = 2;
+                jumps = 1;
             }
         });
     }
 
-    @Override //
+    @Override
     public void onUpdate(double tpf) {
-//        entity.translateX(speed * tpf);
-
+        entity.translateX(speed * tpf);
         if (physics.isMovingX()) {
-
             if (texture.getAnimationChannel() != animWalk) {
                 texture.loopAnimationChannel(animWalk);
             }
-
 //            speed = (int) (speed * 0.9);
         }else{
             if (texture.getAnimationChannel() != animIdle) {
@@ -62,28 +59,17 @@ public class AnimationComponent extends Component {
     }
 
     public void right() {
-        speed = 150;
-
         getEntity().setScaleX(1);
         physics.setVelocityX(150);
     }
 
     public void left() {
-        speed = -150;
-
         getEntity().setScaleX(-1);
         physics.setVelocityX(-150);
     }
-//
-//    public void jump(){
-//        physics.setVelocityY(-300);
-//    }
-//    public void left(){
-//        physics.setVelocityX(-150);
-//    }
-//    public void right(){
-//        physics.setVelocityX(150);
-//    }
+    public void stop(){
+        physics.setVelocityX(0);
+    }
     public void jump(){
         physics.setVelocityY(-300);
     }

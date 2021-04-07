@@ -54,12 +54,16 @@ public class Game extends GameApplication {
             }
         }, KeyCode.W);
     }
+
+
     @Override
     protected void initGame(){
         getGameWorld().addEntityFactory(new NerdFactory());
         FXGL.setLevelFromMap("NerdStart.tmx");
-
+        spawn("background");
         player = getGameWorld().spawn("player", 50, 50);
+        getGameScene().getViewport().setBounds(-1500, 0, 1500, getAppHeight());
+        getGameScene().getViewport().bindToEntity(player, getAppWidth() /2, getAppHeight()/ 2) ;
     }
     @Override
     protected void initPhysics(){

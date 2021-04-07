@@ -1,6 +1,7 @@
 package NerdvsVirus;
 
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.views.ScrollingBackgroundView;
 import com.almasb.fxgl.entity.*;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
@@ -17,10 +18,18 @@ import javafx.scene.shape.Rectangle;
 
 import static NerdvsVirus.NerdType.*;
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
+import static com.almasb.fxgl.dsl.FXGL.texture;
 
 
 public class NerdFactory implements EntityFactory {
-
+    @Spawns("background")
+    public Entity newBackgrojnd(SpawnData data){
+        return entityBuilder()
+                .view(new ScrollingBackgroundView(texture("Start/startBg.png")))
+                .zIndex(-1)
+                .with(new IrremovableComponent())
+                .build();
+    }
     @Spawns("platform")
     public Entity newPlatform(SpawnData data){
         return entityBuilder()
