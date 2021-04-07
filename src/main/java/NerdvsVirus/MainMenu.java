@@ -24,7 +24,11 @@ public class MainMenu extends FXGLMenu {
 
     public MainMenu() {
         super(MenuType.MAIN_MENU);
+<<<<<<< HEAD:src/main/java/NerdvsVirus/MainMenu.java
         getContentRoot().getStylesheets().add(getClass().getResource("../css/styles.css").toExternalForm());
+=======
+        getContentRoot().getStylesheets().add(getClass().getResource("css/styles.css").toExternalForm());
+>>>>>>> origin:src/main/java/MainMenu.java
         var startButton = new StartButton("Start new game", this::fireNewGame);
         startButton.setTranslateX(FXGL.getAppWidth() / 2 - 200 / 2);
         startButton.setTranslateY(FXGL.getAppHeight() / 2 - 40 / 2);
