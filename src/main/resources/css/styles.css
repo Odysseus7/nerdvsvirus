@@ -1,0 +1,9 @@
+#menu{
+    -fx-background-image: url("../assets/textures/Start/startBg.png");
+    -fx-background-size: cover;
+}
+
+#start {
+    -fx-background-image: url("../resources/assets/textures/Start/startBtn.png");
+    -fx-background-size: cover;
+}

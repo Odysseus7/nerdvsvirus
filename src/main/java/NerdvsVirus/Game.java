@@ -10,7 +10,6 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import javafx.scene.input.KeyCode;
 
-
 import NerdvsVirus.MainMenu.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static NerdvsVirus.NerdType.*;
@@ -39,19 +38,19 @@ public class Game extends GameApplication {
         getInput().addAction(new UserAction("Left") {
             @Override
             protected void onAction() {
-                player.getComponent(PlayerControl.class).left();
+                player.getComponent(AnimationComponent.class).left();
             }
         }, KeyCode.A);
         getInput().addAction(new UserAction("Right") {
             @Override
             protected void onAction() {
-                player.getComponent(PlayerControl.class).right();
+                player.getComponent(AnimationComponent.class).right();
             }
         }, KeyCode.D);
         getInput().addAction(new UserAction("Jump") {
             @Override
             protected void onAction() {
-                player.getComponent(PlayerControl.class).jump();
+                player.getComponent(AnimationComponent.class).jump();
             }
         }, KeyCode.W);
     }
