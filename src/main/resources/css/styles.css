@@ -4,6 +4,10 @@
 }
 
 #start {
+<<<<<<< HEAD
     -fx-background-image: url("../assets/textures/Start/startBtn.png");
+=======
+    -fx-background-image: url("../resources/assets/textures/Start/startBtn.png");
+>>>>>>> main
     -fx-background-size: cover;
 }

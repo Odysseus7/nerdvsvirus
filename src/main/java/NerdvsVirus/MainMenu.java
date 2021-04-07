@@ -1,3 +1,5 @@
+package NerdvsVirus;
+
 import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
@@ -22,7 +24,11 @@ public class MainMenu extends FXGLMenu {
 
     public MainMenu() {
         super(MenuType.MAIN_MENU);
+<<<<<<< HEAD:src/main/java/MainMenu.java
         getContentRoot().getStylesheets().add(getClass().getResource("css/styles.css").toExternalForm());
+=======
+        getContentRoot().getStylesheets().add(getClass().getResource("../css/styles.css").toExternalForm());
+>>>>>>> main:src/main/java/NerdvsVirus/MainMenu.java
         var startButton = new StartButton("Start new game", this::fireNewGame);
         startButton.setTranslateX(FXGL.getAppWidth() / 2 - 200 / 2);
         startButton.setTranslateY(FXGL.getAppHeight() / 2 - 40 / 2);
