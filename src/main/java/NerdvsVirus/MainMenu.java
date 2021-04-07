@@ -12,12 +12,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 
 
 public class MainMenu extends FXGLMenu {
@@ -26,9 +24,11 @@ public class MainMenu extends FXGLMenu {
         super(MenuType.MAIN_MENU);
         getContentRoot().getStylesheets().add(getClass().getResource("../css/styles.css").toExternalForm());
 
-        var startButton = new StartButton("Start new game", this::fireNewGame);
-        startButton.setTranslateX(FXGL.getAppWidth() / 2 - 200 / 2);
-        startButton.setTranslateY(FXGL.getAppHeight() / 2 - 40 / 2);
+        Button startButton = new Button("Play", "#b0d876", this::fireNewGame);
+
+
+        startButton.setTranslateX(FXGL.getAppWidth() / 2 - 125 / 2);
+        startButton.setTranslateY(FXGL.getAppHeight() / 2 - 150 / 2);
 
 
         getContentRoot().setPrefWidth(1200);
@@ -38,15 +38,37 @@ public class MainMenu extends FXGLMenu {
     }
 
 
-    private static class StartButton extends StackPane {
-        public StartButton(String name, Runnable action) {
-
-            var bg = new Rectangle(200, 40);
+    private static class Button extends StackPane {
+        public Button(String name, String color, Runnable action) {
+            name = name.toUpperCase();
+            var bg = new Rectangle(125, 40);
             bg.setId("start");
-//            bg.setStroke(Color.WHITE);
-//
-//            var text = FXGL.getUIFactoryService().newText(name, Color.WHITE, 18);
-//
+            bg.setFill(Color.web(color));
+            bg.setStroke(Color.web("#0d1c42"));
+            bg.setStyle("-fx-stroke-width: 3");
+            bg.setArcWidth(15);
+            bg.setArcHeight(15);
+
+            InputStream fontStream = getClass().getResourceAsStream("../assets/fonts/RetroGaming.ttf");
+            try {
+                Font bgFont = Font.loadFont(fontStream, 20);
+                fontStream.close();
+
+                Text text = new Text(name);
+
+                text.setFont(bgFont);
+
+
+                getChildren().addAll(bg, text);
+            } catch (IOException ioe){
+                System.out.println(ioe.getMessage());
+            }
+
+
+
+
+
+
 //            bg.fillProperty().bind(
 //                    Bindings.when(hoverProperty()).then(Color.WHITE).otherwise(Color.BLACK)
 //            );
@@ -56,7 +78,7 @@ public class MainMenu extends FXGLMenu {
 //            );
 
             setOnMouseClicked(e -> action.run());
-            getChildren().addAll(bg);
+
         }
     }
 }
