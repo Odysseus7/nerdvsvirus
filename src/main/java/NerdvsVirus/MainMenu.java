@@ -24,8 +24,9 @@ public class MainMenu extends FXGLMenu {
         super(MenuType.MAIN_MENU);
         getContentRoot().getStylesheets().add(getClass().getResource("../css/styles.css").toExternalForm());
 
-        Button startButton = new Button("Play", "#b0d876", this::fireNewGame);
-        Button scoreButton = new Button("Score", "#3498db", () -> {});
+        Button startButton = new Button("Play", "#b0d876", "#90b855", this::fireNewGame);
+        Button scoreButton = new Button("Score", "#3498db", "#2980b9", () -> {});
+        Button exitButton = new Button("Exit", "#d65c5b", "#b54948", () -> {System.exit(0);});
 
 
         startButton.setTranslateX(FXGL.getAppWidth() / 2 - 125 / 2);
@@ -34,15 +35,18 @@ public class MainMenu extends FXGLMenu {
         scoreButton.setTranslateX(FXGL.getAppWidth() / 2 - 125 / 2);
         scoreButton.setTranslateY(FXGL.getAppHeight() / 2 - 10);
 
+        exitButton.setTranslateX(FXGL.getAppWidth() / 2 - 125 / 2);
+        exitButton.setTranslateY(FXGL.getAppHeight() / 2 + 55);
+
         getContentRoot().setPrefWidth(1200);
         getContentRoot().setPrefHeight(800);
         getContentRoot().setId("menu");
-        getContentRoot().getChildren().addAll(startButton, scoreButton);
+        getContentRoot().getChildren().addAll(startButton, scoreButton, exitButton);
     }
 
 
     private static class Button extends StackPane {
-        public Button(String name, String color, Runnable action) {
+        public Button(String name, String color, String hoverColor, Runnable action) {
             name = name.toUpperCase();
             var bg = new Rectangle(125, 40);
             bg.setId("start");
@@ -67,14 +71,9 @@ public class MainMenu extends FXGLMenu {
                 System.out.println(ioe.getMessage());
             }
 
-
-
-
-
-
-//            bg.fillProperty().bind(
-//                    Bindings.when(hoverProperty()).then(Color.WHITE).otherwise(Color.BLACK)
-//            );
+            bg.fillProperty().bind(
+                    Bindings.when(hoverProperty()).then(Color.web(hoverColor)).otherwise(Color.web(color))
+            );
 //
 //            text.fillProperty().bind(
 //                    Bindings.when(hoverProperty()).then(Color.BLACK).otherwise(Color.WHITE)
