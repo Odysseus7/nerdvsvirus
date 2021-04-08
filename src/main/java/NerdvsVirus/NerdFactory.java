@@ -26,6 +26,8 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 
 public class NerdFactory implements EntityFactory {
+
+
     @Spawns("background1")
     public Entity newBackground(SpawnData data){
         return entityBuilder()
@@ -34,6 +36,7 @@ public class NerdFactory implements EntityFactory {
                 .with(new IrremovableComponent())
                 .build();
     }
+
     @Spawns("background2")
     public Entity newBackground2(SpawnData data){
         return entityBuilder()
@@ -41,7 +44,9 @@ public class NerdFactory implements EntityFactory {
                 .zIndex(-1)
                 .with(new IrremovableComponent())
                 .build();
-    }@Spawns("background3")
+    }
+
+    @Spawns("background3")
     public Entity newBackground3(SpawnData data){
         return entityBuilder()
                 .view(new ScrollingBackgroundView(texture("bg3.jpg")))
@@ -49,6 +54,7 @@ public class NerdFactory implements EntityFactory {
                 .with(new IrremovableComponent())
                 .build();
     }
+
     @Spawns("platform")
     public Entity newPlatform(SpawnData data){
         return entityBuilder()
@@ -58,6 +64,18 @@ public class NerdFactory implements EntityFactory {
                 .with(new PhysicsComponent())
                 .build();
     }
+
+    @Spawns("field")
+    public Entity newField(SpawnData data){
+        return entityBuilder()
+                .from(data)
+                .type(FIELD)
+                .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
+                .with(new PhysicsComponent())
+                .with(new CollidableComponent(true))
+                .build();
+    }
+
     @Spawns("player")
     public Entity newPlayer(SpawnData data){
         PhysicsComponent physics = new PhysicsComponent();
@@ -74,9 +92,9 @@ public class NerdFactory implements EntityFactory {
                 .with(new AnimationComponent())
                 .scale(0.8, 0.8)
                 .build();
+    }
 
-
-    }@Spawns("enemy")
+    @Spawns("enemy")
     public Entity newEnemy(SpawnData data){
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.DYNAMIC);
@@ -86,7 +104,7 @@ public class NerdFactory implements EntityFactory {
                 .from(data)
                 .viewWithBBox("bacteria.png")
                 .scale(0.5, 0.5)
-                .bbox(new HitBox(BoundingShape.box(30, 30)))
+                .bbox(new HitBox(BoundingShape.box(20, 30)))
                 .with(physics)
                 .with(new CollidableComponent(true))
                 .with(new EnemyControl())
@@ -105,6 +123,7 @@ public class NerdFactory implements EntityFactory {
                 .with(new CollidableComponent(true))
                 .build();
     }
+
     @Spawns("door")
     public Entity newDoor(SpawnData data){
         PhysicsComponent physics = new PhysicsComponent();
@@ -116,26 +135,4 @@ public class NerdFactory implements EntityFactory {
                 .with(new CollidableComponent(true))
                 .build();
     }
-    //nog in de maak! niet af @LUUK
-    @Spawns("keyCode")
-    public Entity newKeyCode(SpawnData data) {
-               return entityBuilder(data)
-                .zIndex(100)
-                .build();
-    }
-    @Spawns("button")
-    public Entity newButton(SpawnData data){
-        var keyEntity = FXGL.getGameWorld().create("keyCode", new SpawnData(data.getX(), data.getY() - 50).put("Hoi", "E"));
-        keyEntity.getViewComponent().opacityProperty().setValue(0);
-        return FXGL.entityBuilder()
-                .type(BUTTON)
-                .from(data)
-                .viewWithBBox(new Rectangle(20, 20, Color.GREEN))
-                .with(new CollidableComponent(true))
-                .with("keyCode", keyEntity)
-                .build();
-
-    }
-
-
 }

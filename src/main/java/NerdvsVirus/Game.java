@@ -30,6 +30,7 @@ import org.jetbrains.annotations.TestOnly;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import static com.almasb.fxgl.dsl.FXGL.getSettings;
 import static com.almasb.fxgl.dsl.FXGL.geti;
@@ -39,10 +40,14 @@ import static com.almasb.fxgl.dsl.FXGL.runOnce;
 import static com.almasb.fxgl.dsl.FXGL.showMessage;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static NerdvsVirus.NerdType.*;
+
+
 public class Game extends GameApplication {
     private static final int MAX_LEVEL = 3;
     private static final int STARTING_LEVEL = 0;
     private List<Texture> lives = new ArrayList<>();
+    private Entity player;
+
     @Override
     protected void initSettings(GameSettings gameSettings) {
         //hier wordt de grote van van het scherm belaalt op basis van de groote van de tegels
@@ -59,8 +64,6 @@ public class Game extends GameApplication {
             }
         });
     }
-
-    private Entity player;
 
     @Override
     protected void initInput(){
@@ -94,22 +97,6 @@ public class Game extends GameApplication {
                 player.getComponent(AnimationComponent.class).jump();
             }
         }, KeyCode.W);
-
-//        getInput().addAction(new UserAction("Use") {
-//            @Override
-//            protected void onActionBegin() {
-//                getGameWorld().getEntitiesByType(BUTTON)
-//                        .stream()
-//                        .filter(btn -> btn.hasComponent(CollidableComponent.class) && player.isColliding(btn))
-//                        .forEach(btn ->{
-//                            int doorx = btn.getInt("doorX");
-//                            int doory = btn.getInt("doorY");
-//
-//                            spawn("door", new SpawnData(doorx, doory).put("width", 70).put( "height", 100));
-//                        });
-//            }
-//        }, KeyCode.E);
-
     }
 
     @Override
@@ -125,27 +112,25 @@ public class Game extends GameApplication {
     protected void initGame(){
         getGameState().<Integer>addListener("leven", (prev, now) ->{
             if (now == 0){
-                //moet aangepast worden zodat bij game over terug gaat naar game menu
                 getDisplay().showMessageBox("Game over", () -> { getGameController().gotoMainMenu();});
             }
         });
         //maakt werelden aan via de classe NerdFactory
         getGameWorld().addEntityFactory(new NerdFactory());
-        addLive();
+
         player = null;
         nextLevel();
 
-        player = getGameWorld().spawn("player", 50, 50);
+        player = getGameWorld().spawn("player", 100, 100);
 
         //Set camera volgen player
         getGameScene().getViewport().setBounds(-1500, 0, 3000, getAppHeight());
         getGameScene().getViewport().bindToEntity(player, getAppWidth() /2, getAppHeight()/ 2) ;
-
-        getGameWorld().spawn("enemy", 470, 50);
-
+        getGameWorld().spawn("enemy", 470, 120);
     }
+
     @Override
-    protected void initPhysics(){
+    protected void initPhysics() {
         getPhysicsWorld().addCollisionHandler(new CollisionHandler(PLAYER, SPUIT) {
             @Override
             protected void onCollisionBegin(Entity player, Entity spuit) {
@@ -161,27 +146,35 @@ public class Game extends GameApplication {
                 inc("leven", -1);
                 removeLive();
                 play("impact.wav");
-//                getGameWorld().getEntitiesCopy().forEach(Entity::removeFromWorld);
-
-                System.out.println(geti("leven"));
+                enemy.removeFromWorld();
             }
         });
         getPhysicsWorld().addCollisionHandler(new CollisionHandler(PLAYER, DOOR) {
             @Override
             protected void onCollisionBegin(Entity player, Entity spuit) {
-                getDisplay().showMessageBox("Level Complete", () ->{
-                    System.out.println("Dialog closed!");
+                getDisplay().showMessageBox("Op naar het volgende level!", () -> {
                     nextLevel();
                 });
             }
         });
+        getPhysicsWorld().addCollisionHandler(new CollisionHandler(PLAYER, FIELD) {
+            @Override
+            protected void onCollisionBegin(Entity player, Entity field) {
+                inc("leven", -1);
+                removeLive();
+            }
+        });
     }
     @Override
-    protected void initUI(){
-                FXGL.addVarText("leven", 20, 20);
+    protected void initUI() {
+        FXGL.addVarText("leven", 20, 20);
+
+        IntStream.range(0, geti("leven"))
+                .forEach(i -> addLive());
     }
 
-    public void addLive(){
+
+    public void addLive() {
         int numlifes = lives.size();
         Texture texture = getAssetLoader().loadTexture("hart.png", 30, 30);
         texture.setTranslateX(20 + 32 * numlifes);
@@ -189,13 +182,17 @@ public class Game extends GameApplication {
         lives.add(texture);
         FXGL.getGameScene().addUINode(texture);
     }
-    public void removeLive(){
+
+    public void removeLive() {
         Texture t = lives.get(lives.size() - 1);
+        lives.remove(t);
         getGameScene().removeUINode(t);
     }
-    private void nextLevel(){
+
+    private void nextLevel() {
         if (geti("level") == MAX_LEVEL) {
             showMessage("Je hebt het virus verslagen");
+            getGameController().gotoMainMenu();
             return;
         }
         inc("level", +1);
@@ -204,12 +201,12 @@ public class Game extends GameApplication {
     }
 
     //zorgt er voor dat levels door gaan naar volgende level
-    private void setLevel(int levelNum){
-        if (player != null){
-            player.getComponent(PhysicsComponent.class).overwritePosition(new Point2D(50, 50));
+    private void setLevel(int levelNum) {
+        if (player != null) {
+            player.getComponent(PhysicsComponent.class).overwritePosition(new Point2D(100, 100));
             player.setZIndex(Integer.MAX_VALUE);
         }
-        spawn("background"+geti("level"));
+        spawn("background" + geti("level"));
         Level level = FXGL.setLevelFromMap("NerdStart" + levelNum + ".tmx");
 
     }
