@@ -22,8 +22,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
+import static com.almasb.fxgl.dsl.FXGL.getSettings;
 import static com.almasb.fxgl.dsl.FXGL.geti;
 import static com.almasb.fxgl.dsl.FXGL.inc;
+import static com.almasb.fxgl.dsl.FXGL.loopBGM;
 import static com.almasb.fxgl.dsl.FXGL.showMessage;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static NerdvsVirus.NerdType.*;
@@ -188,6 +190,13 @@ public class Game extends GameApplication {
         Level level = FXGL.setLevelFromMap("NerdStart" + levelNum + ".tmx");
 
     }
+
+    @Override
+    protected void onPreInit() {
+        getSettings().setGlobalMusicVolume(0.25);
+        loopBGM("background.wav");
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
