@@ -19,7 +19,6 @@ import java.io.*;
 
 
 public class MainMenu extends FXGLMenu {
-
     public MainMenu() {
         super(MenuType.MAIN_MENU);
         getContentRoot().getStylesheets().add(getClass().getResource("../css/styles.css").toExternalForm());

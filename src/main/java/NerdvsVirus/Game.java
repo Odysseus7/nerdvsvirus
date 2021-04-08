@@ -3,6 +3,7 @@ package NerdvsVirus;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
+import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -16,6 +17,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 
 import NerdvsVirus.MainMenu.*;
+import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -25,7 +28,6 @@ import static com.almasb.fxgl.dsl.FXGL.showMessage;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static NerdvsVirus.NerdType.*;
 public class Game extends GameApplication {
-
     private static final int MAX_LEVEL = 3;
     private static final int STARTING_LEVEL = 0;
 
@@ -38,11 +40,14 @@ public class Game extends GameApplication {
 
         gameSettings.setMainMenuEnabled(true);
         gameSettings.setSceneFactory(new SceneFactory() {
+            @NotNull
             @Override
             public FXGLMenu newMainMenu() {
                 return new MainMenu();
             }
         });
+
+
     }
 
     private Entity player;
@@ -103,7 +108,7 @@ public class Game extends GameApplication {
         vars.put("level", STARTING_LEVEL);
         vars.put("levelTime", 0.0);
         vars.put("score", 0);
-        vars.put("leven", 5);
+        vars.put("leven", 1);
     }
 
     @Override
@@ -111,7 +116,8 @@ public class Game extends GameApplication {
         getGameState().<Integer>addListener("leven", (prev, now) ->{
             if (now == 0){
                 //moet aangepast worden zodat bij game over terug gaat naar game menu
-                getDisplay().showMessageBox("Game over", );
+                getDisplay().showMessageBox("Game over", () -> { getGameController().startNewGame();});
+
             }
         });
         //maakt werelden aan via de classe NerdFactory
@@ -150,7 +156,7 @@ public class Game extends GameApplication {
         getPhysicsWorld().addCollisionHandler(new CollisionHandler(PLAYER, DOOR) {
             @Override
             protected void onCollisionBegin(Entity player, Entity spuit) {
-                getDisplay().showMessageBox("Level Compleate", () ->{
+                getDisplay().showMessageBox("Level Complete", () ->{
                     System.out.println("Dialog closed!");
                     nextLevel();
                 });
