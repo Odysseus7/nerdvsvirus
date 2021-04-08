@@ -21,14 +21,23 @@ public class MainMenu extends FXGLMenu {
     private void inputName() {
 
         TextField textField = new TextField();
+        Text intro = new Text("Wat is jouw naam?");
 
+        intro.setTranslateX(FXGL.getAppWidth() / 2 - 75);
+        intro.setTranslateY(FXGL.getAppHeight() / 2 - 70);
+        intro.setFont(Font.font("Arial", 20));
 
         textField.setTranslateX(FXGL.getAppWidth() / 2 - 70);
-        textField.setTranslateY(FXGL.getAppHeight() / 2 );
+        textField.setTranslateY(FXGL.getAppHeight() / 2 - 30 );
+
+        Button button = new Button("speel", "#3498db", "#2980b9", this::fireNewGame);
+        button.setTranslateX(FXGL.getAppWidth() / 2 - 55);
+        button.setTranslateY(FXGL.getAppHeight() / 2 + 30);
 
         getContentRoot().getChildren().clear();
-        getContentRoot().getChildren().addAll(textField);
+        getContentRoot().getChildren().addAll(intro, textField, button);
     }
+
     public MainMenu() {
         super(MenuType.MAIN_MENU);
         getContentRoot().getStylesheets().add(getClass().getResource("../css/styles.css").toExternalForm());
