@@ -8,14 +8,22 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import javafx.scene.input.KeyCode;
 
 import NerdvsVirus.MainMenu.*;
+
+import static com.almasb.fxgl.dsl.FXGL.geti;
+import static com.almasb.fxgl.dsl.FXGL.inc;
+import static com.almasb.fxgl.dsl.FXGL.showMessage;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static NerdvsVirus.NerdType.*;
 public class Game extends GameApplication {
+
+    private static final int MAX_LEVEL = 3;
+    private static final int STARTING_LEVEL = 0;
 
     @Override
     protected void initSettings(GameSettings gameSettings) {
@@ -89,7 +97,7 @@ public class Game extends GameApplication {
     @Override
     protected void initGame(){
         getGameWorld().addEntityFactory(new NerdFactory());
-        FXGL.setLevelFromMap("NerdStart.tmx");
+        FXGL.setLevelFromMap("NerdStart1.tmx");
 
         spawn("background");
         //set game
@@ -109,6 +117,24 @@ public class Game extends GameApplication {
                 spuit.removeFromWorld();
             }
         });
+    }
+    private void nextLevel(){
+        if (geti("level") == MAX_LEVEL) {
+            showMessage("Je hebt het virus verslagen");
+            return;
+        }
+
+        inc("level", +1);
+
+        setLevel(geti("level"));
+    }
+    //zorgt er voor dat levels door gaan naar volgende level
+    private void setLevel(int levelNum){
+//        if (player != null){
+//            player.
+//        }
+        Level level = FXGL.setLevelFromMap("levels" + levelNum + ".tmx");
+
     }
     public static void main(String[] args) {
         launch(args);
