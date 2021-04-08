@@ -43,7 +43,7 @@ public class AnimationComponent extends Component {
                 jumps = 2;
             }
         });
-    }
+    } 
 
     @Override
     public void onUpdate(double tpf) {
