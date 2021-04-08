@@ -11,7 +11,6 @@ public class EnemyControl extends Component{
     private PhysicsComponent physics;
 
     private LocalTimer jumpTimer;
-
     @Override
     public void onAdded(){
         jumpTimer = FXGL.newLocalTimer();
