@@ -110,7 +110,8 @@ public class Game extends GameApplication {
     protected void initGame(){
         getGameState().<Integer>addListener("leven", (prev, now) ->{
             if (now == 0){
-                getDisplay().showMessageBox("Game over");
+                //moet aangepast worden zodat bij game over terug gaat naar game menu
+                getDisplay().showMessageBox("Game over", );
             }
         });
         //maakt werelden aan via de classe NerdFactory
