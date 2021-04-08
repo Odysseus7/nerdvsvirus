@@ -11,9 +11,13 @@ import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.physics.PhysicsComponent;
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 
 import NerdvsVirus.MainMenu.*;
+
+import java.util.Map;
 
 import static com.almasb.fxgl.dsl.FXGL.geti;
 import static com.almasb.fxgl.dsl.FXGL.inc;
@@ -93,15 +97,27 @@ public class Game extends GameApplication {
 
     }
 
-
+    @Override
+    protected void initGameVars(Map<String, Object> vars){
+        vars.put("level", STARTING_LEVEL);
+        vars.put("levelTime", 0.0);
+        vars.put("score", 0);
+    }
     @Override
     protected void initGame(){
-        getGameWorld().addEntityFactory(new NerdFactory());
-        FXGL.setLevelFromMap("NerdStart1.tmx");
-
-        spawn("background");
         //set game
+        getGameWorld().addEntityFactory(new NerdFactory());
+
+        player = null;
+        nextLevel();
+
         player = getGameWorld().spawn("player", 50, 50);
+
+//        FXGL.setLevelFromMap("NerdStart1.tmx");
+
+//        spawn("background");
+
+
         //Set camera volgen player
         getGameScene().getViewport().setBounds(-1500, 0, 3000, getAppHeight());
         getGameScene().getViewport().bindToEntity(player, getAppWidth() /2, getAppHeight()/ 2) ;
@@ -117,6 +133,15 @@ public class Game extends GameApplication {
                 spuit.removeFromWorld();
             }
         });
+        getPhysicsWorld().addCollisionHandler(new CollisionHandler(PLAYER, DOOR) {
+            @Override
+            protected void onCollisionBegin(Entity player, Entity spuit) {
+                getDisplay().showMessageBox("Level Compleate", () ->{
+                    System.out.println("Dialog closed!");
+                    nextLevel();
+                });
+            }
+        });
     }
     private void nextLevel(){
         if (geti("level") == MAX_LEVEL) {
@@ -128,12 +153,15 @@ public class Game extends GameApplication {
 
         setLevel(geti("level"));
     }
+
     //zorgt er voor dat levels door gaan naar volgende level
     private void setLevel(int levelNum){
-//        if (player != null){
-//            player.
-//        }
-        Level level = FXGL.setLevelFromMap("levels" + levelNum + ".tmx");
+        if (player != null){
+            player.getComponent(PhysicsComponent.class).overwritePosition(new Point2D(50, 50));
+            player.setZIndex(Integer.MAX_VALUE);
+        }
+        spawn("background"+geti("level"));
+        Level level = FXGL.setLevelFromMap("NerdStart" + levelNum + ".tmx");
 
     }
     public static void main(String[] args) {

@@ -22,15 +22,22 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import static NerdvsVirus.NerdType.*;
-import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
-import static com.almasb.fxgl.dsl.FXGL.texture;
+import static com.almasb.fxgl.dsl.FXGL.*;
 
 
 public class NerdFactory implements EntityFactory {
-    @Spawns("background")
-    public Entity newBackgrojnd(SpawnData data){
+    @Spawns("background1")
+    public Entity newBackground(SpawnData data){
         return entityBuilder()
-                .view(new ScrollingBackgroundView(texture("Start/startBg.png")))
+                .view(new ScrollingBackgroundView(texture("bg1.jpg")))
+                .zIndex(-1)
+                .with(new IrremovableComponent())
+                .build();
+    }
+    @Spawns("background2")
+    public Entity newBackground2(SpawnData data){
+        return entityBuilder()
+                .view(new ScrollingBackgroundView(texture("bg2.jpg")))
                 .zIndex(-1)
                 .with(new IrremovableComponent())
                 .build();
@@ -87,6 +94,17 @@ public class NerdFactory implements EntityFactory {
                 .type(SPUIT)
                 .viewWithBBox("spuit2.png")
                 .scale(0.5, 0.5)
+                .with(new CollidableComponent(true))
+                .build();
+    }
+    @Spawns("door")
+    public Entity newDoor(SpawnData data){
+        PhysicsComponent physics = new PhysicsComponent();
+        physics.setBodyType(BodyType.DYNAMIC);
+        return FXGL.entityBuilder()
+                .from(data)
+                .type(DOOR)
+                .bbox(new HitBox(BoundingShape.box(data.<Integer>get("width"), data.<Integer>get("height"))))
                 .with(new CollidableComponent(true))
                 .build();
     }
