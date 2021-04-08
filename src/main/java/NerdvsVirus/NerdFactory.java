@@ -41,6 +41,13 @@ public class NerdFactory implements EntityFactory {
                 .zIndex(-1)
                 .with(new IrremovableComponent())
                 .build();
+    }@Spawns("background3")
+    public Entity newBackground3(SpawnData data){
+        return entityBuilder()
+                .view(new ScrollingBackgroundView(texture("bg3.jpg")))
+                .zIndex(-1)
+                .with(new IrremovableComponent())
+                .build();
     }
     @Spawns("platform")
     public Entity newPlatform(SpawnData data){
@@ -60,12 +67,12 @@ public class NerdFactory implements EntityFactory {
         return FXGL.entityBuilder()
                 .type(PLAYER)
                 .bbox(new HitBox(new Point2D(5,5), BoundingShape.circle(5)))
-                .bbox(new HitBox(new Point2D(5, 5), BoundingShape.box(75, 168)))
+                .bbox(new HitBox(new Point2D(5, 5), BoundingShape.box(70, 110)))
                 .with(physics)
                 .with(new CollidableComponent(true))
                 .with(new IrremovableComponent())
                 .with(new AnimationComponent())
-                .scale(0.5, 0.5)
+                .scale(0.8, 0.8)
                 .build();
 
 

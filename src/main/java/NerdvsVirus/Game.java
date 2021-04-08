@@ -13,26 +13,36 @@ import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.texture.Texture;
+import javafx.animation.Animation;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 
 import NerdvsVirus.MainMenu.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.TestOnly;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static com.almasb.fxgl.dsl.FXGL.getSettings;
 import static com.almasb.fxgl.dsl.FXGL.geti;
 import static com.almasb.fxgl.dsl.FXGL.inc;
 import static com.almasb.fxgl.dsl.FXGL.loopBGM;
+import static com.almasb.fxgl.dsl.FXGL.runOnce;
 import static com.almasb.fxgl.dsl.FXGL.showMessage;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static NerdvsVirus.NerdType.*;
 public class Game extends GameApplication {
     private static final int MAX_LEVEL = 3;
     private static final int STARTING_LEVEL = 0;
-
+    private List<Texture> lives = new ArrayList<>();
     @Override
     protected void initSettings(GameSettings gameSettings) {
         //hier wordt de grote van van het scherm belaalt op basis van de groote van de tegels
@@ -48,8 +58,6 @@ public class Game extends GameApplication {
                 return new MainMenu();
             }
         });
-
-
     }
 
     private Entity player;
@@ -110,7 +118,7 @@ public class Game extends GameApplication {
         vars.put("level", STARTING_LEVEL);
         vars.put("levelTime", 0.0);
         vars.put("score", 0);
-        vars.put("leven", 1);
+        vars.put("leven", 5);
     }
 
     @Override
@@ -119,12 +127,11 @@ public class Game extends GameApplication {
             if (now == 0){
                 //moet aangepast worden zodat bij game over terug gaat naar game menu
                 getDisplay().showMessageBox("Game over", () -> { getGameController().gotoMainMenu();});
-
             }
         });
         //maakt werelden aan via de classe NerdFactory
         getGameWorld().addEntityFactory(new NerdFactory());
-
+        addLive();
         player = null;
         nextLevel();
 
@@ -143,6 +150,8 @@ public class Game extends GameApplication {
             @Override
             protected void onCollisionBegin(Entity player, Entity spuit) {
                 inc("leven", +1);
+                addLive();
+                play("life.wav");
                 spuit.removeFromWorld();
             }
         });
@@ -150,6 +159,8 @@ public class Game extends GameApplication {
             @Override
             protected void onCollisionBegin(Entity player, Entity enemy) {
                 inc("leven", -1);
+                removeLive();
+                play("impact.wav");
 //                getGameWorld().getEntitiesCopy().forEach(Entity::removeFromWorld);
 
                 System.out.println(geti("leven"));
@@ -167,14 +178,25 @@ public class Game extends GameApplication {
     }
     @Override
     protected void initUI(){
-        FXGL.addVarText("leven", 20, 20);
+                FXGL.addVarText("leven", 20, 20);
+    }
+    public void addLive(){
+        int numlifes = lives.size();
+        Texture texture = getAssetLoader().loadTexture("hart.png", 30, 30);
+        texture.setTranslateX(20 + 32 * numlifes);
+        texture.setTranslateY(40);
+        lives.add(texture);
+        FXGL.getGameScene().addUINode(texture);
+    }
+    public void removeLive(){
+        Texture t = lives.get(lives.size() - 1);
+        getGameScene().removeUINode(t);
     }
     private void nextLevel(){
         if (geti("level") == MAX_LEVEL) {
             showMessage("Je hebt het virus verslagen");
             return;
         }
-
         inc("level", +1);
 
         setLevel(geti("level"));
@@ -193,7 +215,7 @@ public class Game extends GameApplication {
 
     @Override
     protected void onPreInit() {
-        getSettings().setGlobalMusicVolume(0.25);
+        getSettings().setGlobalMusicVolume(0.10);
         loopBGM("background.wav");
     }
 

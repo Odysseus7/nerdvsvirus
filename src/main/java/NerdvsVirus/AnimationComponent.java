@@ -25,8 +25,8 @@ public class AnimationComponent extends Component {
     //weergave van sprite
     public AnimationComponent() {
 
-        animIdle = new AnimationChannel(FXGL.image("sprite.png"), 8, 75, 168, Duration.seconds(1), 1, 1);
-        animWalk = new AnimationChannel(FXGL.image("sprite.png"), 8, 75, 168, Duration.seconds(0.8), 0, 7);
+        animIdle = new AnimationChannel(FXGL.image("nerd.png"), 9, 60, 128, Duration.seconds(1), 0, 0);
+        animWalk = new AnimationChannel(FXGL.image("nerd.png"), 9, 60, 128, Duration.seconds(0.8), 1, 8);
 
         texture = new AnimatedTexture(animIdle);
         texture.loop();
