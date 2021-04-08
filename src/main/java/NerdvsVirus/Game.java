@@ -180,6 +180,7 @@ public class Game extends GameApplication {
     protected void initUI(){
                 FXGL.addVarText("leven", 20, 20);
     }
+
     public void addLive(){
         int numlifes = lives.size();
         Texture texture = getAssetLoader().loadTexture("hart.png", 30, 30);

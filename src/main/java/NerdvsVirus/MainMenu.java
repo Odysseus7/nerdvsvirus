@@ -4,11 +4,10 @@ import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -19,11 +18,22 @@ import java.io.*;
 
 
 public class MainMenu extends FXGLMenu {
+    private void inputName() {
+
+        TextField textField = new TextField();
+
+
+        textField.setTranslateX(FXGL.getAppWidth() / 2 - 70);
+        textField.setTranslateY(FXGL.getAppHeight() / 2 );
+
+        getContentRoot().getChildren().clear();
+        getContentRoot().getChildren().addAll(textField);
+    }
     public MainMenu() {
         super(MenuType.MAIN_MENU);
         getContentRoot().getStylesheets().add(getClass().getResource("../css/styles.css").toExternalForm());
 
-        Button startButton = new Button("Play", "#b0d876", "#90b855", this::fireNewGame);
+        Button startButton = new Button("Play", "#b0d876", "#90b855", this::inputName);
         Button scoreButton = new Button("Score", "#3498db", "#2980b9", () -> {});
         Button exitButton = new Button("Exit", "#d65c5b", "#b54948", () -> {System.exit(0);});
 
@@ -32,7 +42,7 @@ public class MainMenu extends FXGLMenu {
         Image image = new Image(input);
         ImageView imageView = new ImageView(image);
 
-        imageView.setTranslateX(FXGL.getAppWidth() / 2 - 447 / 2);
+        imageView.setTranslateX(FXGL.getAppWidth() / 2 - 400 / 2);
         imageView.setTranslateY(FXGL.getAppHeight() / 2 - 210);
 
 
