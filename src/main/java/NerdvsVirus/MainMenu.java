@@ -46,7 +46,6 @@ public class MainMenu extends FXGLMenu {
         Button scoreButton = new Button("Score", "#3498db", "#2980b9", () -> {});
         Button exitButton = new Button("Exit", "#d65c5b", "#b54948", () -> {System.exit(0);});
 
-
         InputStream input = getClass().getResourceAsStream("../assets/textures/Start/logo.png");
         Image image = new Image(input);
         ImageView imageView = new ImageView(image);
