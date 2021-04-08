@@ -118,7 +118,9 @@ public class Game extends GameApplication {
         getGameState().<Integer>addListener("leven", (prev, now) ->{
             if (now == 0){
                 //moet aangepast worden zodat bij game over terug gaat naar game menu
+
                 getDisplay().showMessageBox("Game over", () -> { getGameController().gotoMainMenu();});
+
 
             }
         });
