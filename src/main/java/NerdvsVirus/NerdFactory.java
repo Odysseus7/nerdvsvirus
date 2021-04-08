@@ -81,6 +81,7 @@ public class NerdFactory implements EntityFactory {
                 .scale(0.5, 0.5)
                 .bbox(new HitBox(BoundingShape.box(30, 30)))
                 .with(physics)
+                .with(new CollidableComponent(true))
                 .with(new EnemyControl())
                 .build();
     }

@@ -99,24 +99,27 @@ public class Game extends GameApplication {
 
     @Override
     protected void initGameVars(Map<String, Object> vars){
+        //maakt variablen aan voor het veranderen van levels
         vars.put("level", STARTING_LEVEL);
         vars.put("levelTime", 0.0);
         vars.put("score", 0);
+        vars.put("leven", 5);
     }
+
     @Override
     protected void initGame(){
-        //set game
+        getGameState().<Integer>addListener("leven", (prev, now) ->{
+            if (now == 0){
+                getDisplay().showMessageBox("Game over");
+            }
+        });
+        //maakt werelden aan via de classe NerdFactory
         getGameWorld().addEntityFactory(new NerdFactory());
 
         player = null;
         nextLevel();
 
         player = getGameWorld().spawn("player", 50, 50);
-
-//        FXGL.setLevelFromMap("NerdStart1.tmx");
-
-//        spawn("background");
-
 
         //Set camera volgen player
         getGameScene().getViewport().setBounds(-1500, 0, 3000, getAppHeight());
@@ -130,7 +133,17 @@ public class Game extends GameApplication {
         getPhysicsWorld().addCollisionHandler(new CollisionHandler(PLAYER, SPUIT) {
             @Override
             protected void onCollisionBegin(Entity player, Entity spuit) {
+                inc("leven", +1);
                 spuit.removeFromWorld();
+            }
+        });
+        getPhysicsWorld().addCollisionHandler(new CollisionHandler(PLAYER, ENEMY) {
+            @Override
+            protected void onCollisionBegin(Entity player, Entity enemy) {
+                inc("leven", -1);
+//                getGameWorld().getEntitiesCopy().forEach(Entity::removeFromWorld);
+
+                System.out.println(geti("leven"));
             }
         });
         getPhysicsWorld().addCollisionHandler(new CollisionHandler(PLAYER, DOOR) {
@@ -142,6 +155,10 @@ public class Game extends GameApplication {
                 });
             }
         });
+    }
+    @Override
+    protected void initUI(){
+        FXGL.addVarText("leven", 20, 20);
     }
     private void nextLevel(){
         if (geti("level") == MAX_LEVEL) {
