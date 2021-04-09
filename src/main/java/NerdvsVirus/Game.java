@@ -115,6 +115,7 @@ public class Game extends GameApplication {
                 getDisplay().showMessageBox("Game over", () -> { getGameController().gotoMainMenu();});
             }
         });
+        System.out.println(MainMenu.name);
         //maakt werelden aan via de classe NerdFactory
         getGameWorld().addEntityFactory(new NerdFactory());
 

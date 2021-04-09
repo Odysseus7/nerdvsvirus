@@ -24,9 +24,7 @@ import javafx.util.Duration;
 import static NerdvsVirus.NerdType.*;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
-
 public class NerdFactory implements EntityFactory {
-
 
     @Spawns("background1")
     public Entity newBackground(SpawnData data){

@@ -4,9 +4,11 @@ import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
 import javafx.beans.binding.Bindings;
+import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -18,8 +20,9 @@ import java.io.*;
 
 
 public class MainMenu extends FXGLMenu {
-    private void inputName() {
+    public static String name;
 
+    private void inputName() {
         TextField textField = new TextField();
         Text intro = new Text("Wat is jouw naam?");
 
@@ -30,12 +33,21 @@ public class MainMenu extends FXGLMenu {
         textField.setTranslateX(FXGL.getAppWidth() / 2 - 70);
         textField.setTranslateY(FXGL.getAppHeight() / 2 - 30 );
 
+
         Button button = new Button("speel", "#3498db", "#2980b9", this::fireNewGame);
         button.setTranslateX(FXGL.getAppWidth() / 2 - 55);
         button.setTranslateY(FXGL.getAppHeight() / 2 + 30);
 
+        button.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                name = textField.getText();
+            }
+        });
+
         getContentRoot().getChildren().clear();
         getContentRoot().getChildren().addAll(intro, textField, button);
+
     }
 
     public MainMenu() {

@@ -23,7 +23,6 @@ public class EnemyControl extends Component{
             jump();
             jumpTimer.capture();
         }
-
     }
 
 
