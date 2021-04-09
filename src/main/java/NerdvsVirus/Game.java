@@ -111,7 +111,7 @@ public class Game extends GameApplication {
     protected void initGame(){
         getGameState().<Integer>addListener("leven", (prev, now) ->{
             if (now == 0){
-                getDisplay().showMessageBox("Game over", () -> { getGameController().gotoMainMenu();});
+                getDisplay().showMessageBox("Game over", () -> getGameController().gotoMainMenu());
             }
         });
 
@@ -203,7 +203,7 @@ public class Game extends GameApplication {
         setLevel(geti("level"));
     }
 
-    //zorgt er voor dat levels door gaan naar volgende level
+    // zorgt er voor dat levels door gaan naar volgende level
     private void setLevel(int levelNum) {
         if (player != null) {
             player.getComponent(PhysicsComponent.class).overwritePosition(new Point2D(100, 100));
