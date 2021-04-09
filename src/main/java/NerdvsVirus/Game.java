@@ -15,6 +15,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -111,6 +114,7 @@ public class Game extends GameApplication {
     protected void initGame(){
         getGameState().<Integer>addListener("leven", (prev, now) ->{
             if (now == 0){
+                writeHighscoreToFile();
                 getDisplay().showMessageBox("Game over", () -> getGameController().gotoMainMenu());
             }
         });
@@ -218,6 +222,21 @@ public class Game extends GameApplication {
     protected void onPreInit() {
         getSettings().setGlobalMusicVolume(0.10);
         loopBGM("background.wav");
+    }
+
+    private void writeHighscoreToFile() {
+        String fileNaam = "scores.txt";
+        FileWriter fileWriter;
+        String numLives = Integer.toString(lives.size());
+
+        try {
+            fileWriter = new FileWriter(fileNaam);
+            PrintWriter printWriter = new PrintWriter(fileWriter);
+            printWriter.print(MainMenu.name + numLives);
+            printWriter.close();
+        } catch (IOException ioe) {
+            System.out.println("Er is iets misgegaan!");
+        }
     }
 
     public static void main(String[] args) {
