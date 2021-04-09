@@ -9,7 +9,7 @@ public class PlayerControl extends Component {
 
 
     public void onUpdate(Entity entity, double tpf){
-        
+
     }
 
     public void left(){
