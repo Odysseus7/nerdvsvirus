@@ -3,43 +3,41 @@ package NerdvsVirus;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.app.scene.FXGLMenu;
-import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
-import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.entity.level.Level;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.Texture;
-import javafx.animation.Animation;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
-
-import NerdvsVirus.MainMenu.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.TestOnly;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+import static NerdvsVirus.NerdType.*;
 import static com.almasb.fxgl.dsl.FXGL.getSettings;
 import static com.almasb.fxgl.dsl.FXGL.geti;
 import static com.almasb.fxgl.dsl.FXGL.inc;
 import static com.almasb.fxgl.dsl.FXGL.loopBGM;
-import static com.almasb.fxgl.dsl.FXGL.runOnce;
 import static com.almasb.fxgl.dsl.FXGL.showMessage;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
-import static NerdvsVirus.NerdType.*;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppHeight;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getAppWidth;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getAssetLoader;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getDisplay;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameController;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameState;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getInput;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getPhysicsWorld;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.play;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
 
 public class Game extends GameApplication {
@@ -50,12 +48,12 @@ public class Game extends GameApplication {
 
     @Override
     protected void initSettings(GameSettings gameSettings) {
-        //hier wordt de grote van van het scherm belaalt op basis van de groote van de tegels
+        // hier wordt de grote van van het scherm belaalt op basis van de groote van de tegels
         gameSettings.setWidth(15 * 70);
         gameSettings.setHeight(10 * 70);
         gameSettings.setTitle("Nerds VS Virus");
-
         gameSettings.setMainMenuEnabled(true);
+
         gameSettings.setSceneFactory(new SceneFactory() {
             @NotNull
             @Override
@@ -79,6 +77,7 @@ public class Game extends GameApplication {
             }
 
         }, KeyCode.A);
+
         getInput().addAction(new UserAction("Right") {
             @Override
             protected void onAction() {
@@ -89,8 +88,8 @@ public class Game extends GameApplication {
             protected void onActionEnd() {
                 player.getComponent(AnimationComponent.class).stop();
             }
-
         }, KeyCode.D);
+
         getInput().addAction(new UserAction("Jump") {
             @Override
             protected void onActionBegin() {
@@ -101,7 +100,7 @@ public class Game extends GameApplication {
 
     @Override
     protected void initGameVars(Map<String, Object> vars){
-        //maakt variablen aan voor het veranderen van levels
+        // maakt variablen aan voor het veranderen van levels
         vars.put("level", STARTING_LEVEL);
         vars.put("levelTime", 0.0);
         vars.put("score", 0);
@@ -115,8 +114,8 @@ public class Game extends GameApplication {
                 getDisplay().showMessageBox("Game over", () -> { getGameController().gotoMainMenu();});
             }
         });
-        System.out.println(MainMenu.name);
-        //maakt werelden aan via de classe NerdFactory
+
+        // maakt werelden aan via de classe NerdFactory
         getGameWorld().addEntityFactory(new NerdFactory());
 
         player = null;
@@ -124,9 +123,9 @@ public class Game extends GameApplication {
 
         player = getGameWorld().spawn("player", 100, 100);
 
-        //Set camera volgen player
+        // Set camera voor volgen van player
         getGameScene().getViewport().setBounds(-1500, 0, 3000, getAppHeight());
-        getGameScene().getViewport().bindToEntity(player, getAppWidth() /2, getAppHeight()/ 2) ;
+        getGameScene().getViewport().bindToEntity(player, getAppWidth() / 2.0, getAppHeight() / 2.0) ;
         getGameWorld().spawn("enemy", 470, 120);
     }
 
@@ -136,20 +135,22 @@ public class Game extends GameApplication {
             @Override
             protected void onCollisionBegin(Entity player, Entity spuit) {
                 inc("leven", +1);
-                addLive();
+                addLife();
                 play("life.wav");
                 spuit.removeFromWorld();
             }
         });
+
         getPhysicsWorld().addCollisionHandler(new CollisionHandler(PLAYER, ENEMY) {
             @Override
             protected void onCollisionBegin(Entity player, Entity enemy) {
                 inc("leven", -1);
-                removeLive();
+                removeLife();
                 play("impact.wav");
                 enemy.removeFromWorld();
             }
         });
+
         getPhysicsWorld().addCollisionHandler(new CollisionHandler(PLAYER, DOOR) {
             @Override
             protected void onCollisionBegin(Entity player, Entity spuit) {
@@ -158,11 +159,12 @@ public class Game extends GameApplication {
                 });
             }
         });
+
         getPhysicsWorld().addCollisionHandler(new CollisionHandler(PLAYER, FIELD) {
             @Override
             protected void onCollisionBegin(Entity player, Entity field) {
                 inc("leven", -1);
-                removeLive();
+                removeLife();
             }
         });
     }
@@ -171,20 +173,20 @@ public class Game extends GameApplication {
         FXGL.addVarText("leven", 20, 20);
 
         IntStream.range(0, geti("leven"))
-                .forEach(i -> addLive());
+                .forEach(i -> addLife());
     }
 
 
-    public void addLive() {
-        int numlifes = lives.size();
+    public void addLife() {
+        int numLives = lives.size();
         Texture texture = getAssetLoader().loadTexture("hart.png", 30, 30);
-        texture.setTranslateX(20 + 32 * numlifes);
+        texture.setTranslateX(20 + 32 * numLives);
         texture.setTranslateY(40);
         lives.add(texture);
         FXGL.getGameScene().addUINode(texture);
     }
 
-    public void removeLive() {
+    public void removeLife() {
         Texture t = lives.get(lives.size() - 1);
         lives.remove(t);
         getGameScene().removeUINode(t);
@@ -207,9 +209,9 @@ public class Game extends GameApplication {
             player.getComponent(PhysicsComponent.class).overwritePosition(new Point2D(100, 100));
             player.setZIndex(Integer.MAX_VALUE);
         }
+
         spawn("background" + geti("level"));
         Level level = FXGL.setLevelFromMap("NerdStart" + levelNum + ".tmx");
-
     }
 
     @Override

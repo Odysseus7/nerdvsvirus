@@ -11,15 +11,11 @@ import javafx.util.Duration;
 public class AnimationComponent extends Component {
 
     private int jumps = 2;
-
     private PhysicsComponent physics;
-
     private AnimatedTexture texture;
-
     private AnimationChannel animIdle, animWalk;
 
-
-    //weergave van sprite
+    // weergave van sprite
     public AnimationComponent() {
 
         animIdle = new AnimationChannel(FXGL.image("nerd.png"), 9, 60, 128, Duration.seconds(1), 0, 0);
@@ -31,7 +27,6 @@ public class AnimationComponent extends Component {
 
     @Override
     public void onAdded() {
-//        entity.setView(texture);
         entity.getTransformComponent().setScaleOrigin(new Point2D(16, 21)); // om achteruit te kunnen lopen
         entity.getViewComponent().addChild(texture);
 
@@ -44,12 +39,10 @@ public class AnimationComponent extends Component {
 
     @Override
     public void onUpdate(double tpf) {
-        //entity.translateX(speed * tpf);
         if (physics.isMovingX()) {
             if (texture.getAnimationChannel() != animWalk) {
                 texture.loopAnimationChannel(animWalk);
             }
-//            speed = (int) (speed * 0.9);
         }else{
             if (texture.getAnimationChannel() != animIdle) {
                 texture.loopAnimationChannel(animIdle);
@@ -66,9 +59,11 @@ public class AnimationComponent extends Component {
         getEntity().setScaleX(-1);
         physics.setVelocityX(-150);
     }
+
     public void stop(){
         physics.setVelocityX(0);
     }
+
     public void jump(){
         if (jumps == 0){
             return;
